@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Portal Subdomain & Email IKMI</title>
+  <meta name="color-scheme" content="light dark" />
+  <style>
+    :root{
+      --bg:#0f172a;           /* slate-900 */
+      --card:#0b1225;
+      --text:#e2e8f0;         /* slate-200 */
+      --muted:#94a3b8;        /* slate-400 */
+      --brand:#06b6d4;        /* cyan-500 */
+      --brand-2:#22d3ee;      /* cyan-400 */
+      --accent:#10b981;       /* emerald-500 */
+      --warn:#f59e0b;         /* amber-500 */
+      --error:#ef4444;        /* red-500 */
+      --ok:#22c55e;           /* green-500 */
+      --ring: rgba(34,211,238,.35);
+      --shadow: 0 10px 25px rgba(0,0,0,.35);
+      --radius: 14px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 80% -10%, rgba(34,211,238,.15), transparent 60%),
+        radial-gradient(900px 500px at -10% 10%, rgba(16,185,129,.15), transparent 55%),
+        linear-gradient(180deg, #0b1022 0%, #0b1022 45%, #0f172a 100%);
+      min-height:100%;
+    }
+    header{
+      position:sticky; top:0; z-index:10;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(11,16,34,.85), rgba(11,16,34,.55));
+      border-bottom:1px solid rgba(148,163,184,.15);
+    }
+    .nav{
+      max-width:1100px; margin:auto; padding:14px 18px;
+      display:flex; align-items:center; gap:14px; justify-content:space-between;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+    }
+    .brand h1{
+      font-size:16px; margin:0; letter-spacing:.3px; color:var(--text);
+    }
+
+    /* =========================
+       LOGO RESPONSIVE (diubah)
+       ========================= */
+    .logo{
+      width:40px;                 /* ukuran dasar (mobile-portrait–tablet kecil) */
+      height:40px;
+      object-fit:contain;
+      border-radius:10px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      padding:5px;
+    }
+    /* Tablet & laptop sedang */
+    @media (min-width: 768px){
+      .logo{ width:44px; height:44px; padding:6px; }
+    }
+    /* Laptop besar & desktop */
+    @media (min-width: 1200px){
+      .logo{ width:52px; height:52px; padding:7px; }
+    }
+    /* Ponsel kecil */
+    @media (max-width: 480px){
+      .logo{ width:32px; height:32px; padding:4px; }
+    }
+
+    .help{ display:flex; align-items:center; gap:10px; }
+    .btn{
+      appearance:none; border:none; cursor:pointer; font-weight:600;
+      padding:10px 14px; border-radius:12px; color:#05151a; background:var(--brand-2);
+      transition:.2s transform ease, .2s background ease, .2s box-shadow ease;
+      box-shadow:0 6px 18px rgba(2,132,199,.23);
+    }
+    .btn:hover{ transform:translateY(-1px); }
+    .btn-outline{
+      background:transparent; color:var(--text); border:1px solid rgba(148,163,184,.35);
+      box-shadow:none;
+    }
+    .btn-danger{ background:var(--error); color:white; box-shadow:0 6px 18px rgba(239,68,68,.28); }
+    .btn-ok{ background:var(--accent); color:#032216; box-shadow:0 6px 18px rgba(16,185,129,.25); }
+
+    main{ max-width:1100px; margin:28px auto; padding:0 18px 60px; }
+    .grid{ display:grid; gap:18px; grid-template-columns: repeat(12, 1fr); }
+    .card{
+      grid-column: span 12;
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      border:1px solid rgba(148,163,184,.18);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:18px;
+    }
+    .card h2{ margin:0 0 12px; font-size:18px; letter-spacing:.3px; }
+    .muted{ color:var(--muted); font-size:13px }
+    .row{ display:flex; gap:12px; flex-wrap:wrap; }
+    .field{ flex:1 1 220px; display:flex; flex-direction:column; gap:8px; min-width:220px; }
+    label{ font-size:13px; color:var(--muted) }
+    input, select{
+      width:100%; padding:12px 12px; border-radius:12px; color:var(--text);
+      background: rgba(2,6,23,.6);
+      border:1px solid rgba(148,163,184,.25);
+      outline:none;
+      transition: .2s border ease, .2s box-shadow ease, .2s background ease;
+    }
+    input:focus, select:focus{
+      border-color: var(--brand-2);
+      box-shadow: 0 0 0 6px var(--ring);
+      background: rgba(2,6,23,.75);
+    }
+    .actions{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+
+    .badge{
+      display:inline-flex; gap:8px; align-items:center;
+      padding:6px 10px; border-radius:999px; font-size:12px; border:1px solid rgba(148,163,184,.25);
+      background: rgba(2,6,23,.55);
+    }
+    .list{ display:grid; gap:10px; margin-top:10px; }
+    .item{
+      display:flex; justify-content:space-between; align-items:center; gap:8px;
+      background: rgba(2,6,23,.55); border:1px solid rgba(148,163,184,.2);
+      padding:12px 14px; border-radius:12px;
+    }
+    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+    .hint{ font-size:12px; color:var(--muted); margin-top:6px }
+
+    footer{
+      max-width:1100px; margin:30px auto 80px; padding:0 18px; color:var(--muted);
+      display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    }
+    footer .right{ display:flex; gap:10px; align-items:center }
+
+    /* responsive columns */
+    @media (min-width: 920px){
+      .card.span-6{ grid-column: span 6; }
+      .card.span-4{ grid-column: span 4; }
+      .card.span-8{ grid-column: span 8; }
+    }
+
+    /* Toast */
+    .toast{ position:fixed; right:14px; bottom:14px; z-index:100; display:flex; flex-direction:column; gap:10px; max-width:92vw; }
+    .toast-item{ padding:12px 14px; border-radius:12px; color:#041012; background:#e6fffa; border:1px solid #99f6e4; box-shadow: var(--shadow); font-size:14px; line-height:1.35; }
+    .toast-error{ background:#fff1f2; color:#4a0d12; border-color:#fecdd3; }
+    .toast-warn{ background:#fff7ed; color:#4a2a0a; border-color:#fed7aa; }
+    .toast-ok{ background:#ecfdf5; color:#052d1b; border-color:#bbf7d0; }
+    .spinner{ width:16px; height:16px; border:3px solid rgba(255,255,255,.25); border-top-color:#fff; border-radius:999px; display:inline-block; animation:spin 1s linear infinite; }
+    @keyframes spin{ to{ transform:rotate(360deg) } }
+    a.link{ color:var(--brand-2); text-decoration: none; border-bottom:1px dotted rgba(34,211,238,.5); }
+    a.link:hover{ border-bottom-color: var(--brand-2); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div class="brand">
+        <!-- Ganti 'logo.png' dengan file logomu. CSS di atas yang mengatur ukuran responsif -->
+        <img class="inigambar" src="inigambar.png" alt="IKMI Logo" loading="lazy" decoding="async" />
+        <h1>Portal Subdomain & Email IKMI</h1>
+      </div>
+      <div class="help">
+        <button class="btn btn-outline" onclick="window.open('https://t.me/rijin111', '_blank')">Perlu bantuan? Hubungi admin</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="grid">
+      <section class="card span-6" id="card-nim">
+        <h2>1) Validasi NIM</h2>
+        <p class="muted">Masukkan NIM untuk melanjutkan. Sistem membaca data NIM dari daftar mahasiswa.</p>
+        <div class="row">
+          <div class="field">
+            <label for="nim">NIM</label>
+            <input id="nim" inputmode="numeric" placeholder="mis. 41226xxx" autocomplete="off" />
+          </div>
+        </div>
+        <div class="actions" style="margin-top:10px">
+          <button class="btn" id="btnCheck">Validasi NIM</button>
+          <span id="nimResult" class="badge" hidden>—</span>
+        </div>
+        <p class="hint" id="protectInfo" hidden>Catatan: NIM ini diproteksi, Anda mungkin diminta memasukkan username & password saat membuat subdomain/email.</p>
+      </section>
+
+      <section class="card span-6" id="card-usage">
+        <h2>Profil & Kuota</h2>
+        <div class="row" style="gap:14px; align-items:flex-end">
+          <div class="badge" id="identity">Nama: —</div>
+          <div class="badge">Subdomain terpakai: <span id="subUsed" class="mono">0</span>/3</div>
+          <div class="badge">Email terpakai: <span id="mailUsed" class="mono">0</span>/3</div>
+        </div>
+        <p class="hint" id="usageHint">Validasi NIM terlebih dahulu.</p>
+      </section>
+
+      <section class="card span-6" id="card-sub">
+        <h2>2) Buat Subdomain</h2>
+        <p class="muted">Subdomain akan dibuat sebagai CNAME ke Netlify target. Contoh: <span class="mono">projek1.ikmi.me</span></p>
+        <div class="row">
+          <div class="field">
+            <label for="subdomain">Nama subdomain</label>
+            <input id="subdomain" placeholder="mis. projek1" />
+          </div>
+        </div>
+        <div class="actions" style="margin-top:10px">
+          <button class="btn" id="btnSub">Buat Subdomain</button>
+          <span class="hint">Hindari karakter selain a-z, 0-9, dan tanda minus.</span>
+        </div>
+        <div class="list" id="subsList"></div>
+      </section>
+
+      <section class="card span-6" id="card-email">
+        <h2>3) Buat Email Routing</h2>
+        <p class="muted">Email hanya dapat dibuat di subdomain yang Anda miliki.</p>
+        <div class="row">
+          <div class="field" style="min-width:170px">
+            <label for="emailLocal">Nama email (local-part)</label>
+            <input id="emailLocal" placeholder="mis. nama" />
+          </div>
+          <div class="field" style="min-width:220px">
+            <label for="emailSub">Pilih subdomain milik Anda</label>
+            <select id="emailSub">
+              <option value="" selected disabled>— pilih subdomain —</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="destEmail">Email tujuan (forward)</label>
+            <input id="destEmail" type="email" placeholder="nama@gmail.com" />
+          </div>
+        </div>
+        <div class="actions" style="margin-top:10px">
+          <button class="btn" id="btnEmail">Buat Email</button>
+          <span class="hint">Maksimal 3 email per NIM.</span>
+        </div>
+        <div class="list" id="emailsList"></div>
+      </section>
+
+      <section class="card span-12" id="card-history">
+        <h2>Riwayat & Informasi</h2>
+        <div class="row">
+          <div class="badge">NIM Aktif: <span class="mono" id="activeNim">—</span></div>
+          <div class="badge">Domain: <span class="mono" id="rootDomain">ikmi.me</span></div>
+        </div>
+        <p class="hint">Setelah subdomain & email dibuat, butuh beberapa saat untuk propagasi DNS & aturan Email Routing aktif.</p>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div>© <span id="year"></span> IKMI Cirebon — All rights reserved.</div>
+    <div class="right">
+      <span>Created by <strong>Rijin</strong></span>
+      <a class="btn btn-outline" href="https://t.me/rijin111" target="_blank" rel="noopener">Perlu bantuan? Hubungi admin</a>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const $ = (sel) => document.querySelector(sel);
+    const toastEl = $("#toast");
+    function toast(msg, type="ok"){
+      const el = document.createElement("div");
+      el.className = "toast-item " + (type==="error" ? "toast-error" : type==="warn" ? "toast-warn" : "toast-ok");
+      el.textContent = msg;
+      toastEl.appendChild(el);
+      setTimeout(()=>{ el.style.opacity=0; setTimeout(()=>el.remove(), 350); }, 3600);
+    }
+    function setLoading(btn, isLoading){
+      if(!btn) return;
+      btn.disabled = !!isLoading;
+      if(isLoading){
+        btn.dataset.label = btn.textContent;
+        btn.innerHTML = '<span class="spinner"></span> &nbsp;Memproses...';
+      }else{
+        btn.innerHTML = btn.dataset.label || btn.textContent;
+      }
+    }
+    function fmtDate(s){ try{ return new Date(s).toLocaleString(); }catch{ return s; } }
+
+    const state = {
+      root: "ikmi.me",
+      nim: null,
+      nama: null,
+      usage: { subdomains:0, emails:0 },
+      subs: [],
+      emails: [],
+      auth: { username: null, password: null },
+    };
+    function getAuthHeader(){
+      if(!state.auth.username || !state.auth.password) return {};
+      const token = btoa(state.auth.username + ":" + state.auth.password);
+      return { "Authorization": "Basic " + token };
+    }
+    const base = ""; // same-origin
+    async function api(path, {method="GET", body, needAuth=false}={}){
+      const headers = { "Content-Type": "application/json" };
+      if(needAuth){ Object.assign(headers, getAuthHeader()); }
+      const res = await fetch(base + path, { method, headers, body: body ? JSON.stringify(body) : undefined });
+      if(res.status === 401 && needAuth){
+        await askCredentialsOnce();
+        Object.assign(headers, getAuthHeader());
+        return fetch(base + path, { method, headers, body: body ? JSON.stringify(body) : undefined });
+      }
+      return res;
+    }
+    async function askCredentialsOnce(){
+      if(state.auth.username && state.auth.password) return;
+      const u = prompt("NIM ini diproteksi. Masukkan username:");
+      if(u===null) return;
+      const p = prompt("Masukkan password:");
+      if(p===null) return;
+      state.auth.username = u.trim();
+      state.auth.password = p;
+      sessionStorage.setItem("nim_auth_user", state.auth.username);
+      sessionStorage.setItem("nim_auth_pass", state.auth.password);
+    }
+    (function preloadAuth(){
+      const u = sessionStorage.getItem("nim_auth_user");
+      const p = sessionStorage.getItem("nim_auth_pass");
+      if(u && p){ state.auth.username = u; state.auth.password = p; }
+    })();
+
+    const nimInput = $("#nim"), btnCheck = $("#btnCheck"), nimResult = $("#nimResult"), protectInfo = $("#protectInfo");
+    const identity = $("#identity"), subUsed = $("#subUsed"), mailUsed = $("#mailUsed"), usageHint = $("#usageHint");
+    const activeNim = $("#activeNim"), rootDomain = $("#rootDomain");
+    const subInput = $("#subdomain"), btnSub = $("#btnSub"), subsList = $("#subsList");
+    const emailLocal = $("#emailLocal"), emailSub = $("#emailSub"), destEmail = $("#destEmail"), btnEmail = $("#btnEmail"), emailsList = $("#emailsList");
+
+    function renderUsage(){
+      identity.textContent = state.nama ? `Nama: ${state.nama}` : "Nama: —";
+      subUsed.textContent = state.usage.subdomains || 0;
+      mailUsed.textContent = state.usage.emails || 0;
+      activeNim.textContent = state.nim || "—";
+      rootDomain.textContent = state.root;
+      usageHint.textContent = state.nim ? "Anda dapat membuat subdomain & email sesuai kuota." : "Validasi NIM terlebih dahulu.";
+    }
+    function renderSubs(){
+      subsList.innerHTML = "";
+      emailSub.innerHTML = '<option value="" disabled selected>— pilih subdomain —</option>';
+      (state.subs || []).forEach(s=>{
+        const el = document.createElement("div");
+        el.className = "item";
+        el.innerHTML =
+          `<div>
+             <div class="mono">${s.fqdn}</div>
+             <div class="hint">dibuat: ${fmtDate(s.createdAt)}</div>
+           </div>
+           <span class="badge">→ ${s.target}</span>`;
+        subsList.appendChild(el);
+        const opt = document.createElement("option");
+        opt.value = s.sub;
+        opt.textContent = `${s.sub}.${state.root}`;
+        emailSub.appendChild(opt);
+      });
+    }
+    function renderEmails(){
+      emailsList.innerHTML = "";
+      (state.emails || []).forEach(e=>{
+        const el = document.createElement("div");
+        el.className = "item";
+        el.innerHTML =
+          `<div>
+             <div class="mono">${e.email}</div>
+             <div class="hint">→ ${e.destination}</div>
+           </div>
+           <span class="badge">dibuat: ${fmtDate(e.createdAt)}</span>`;
+        emailsList.appendChild(el);
+      });
+    }
+
+    async function validateNim(){
+      const nim = (nimInput.value || "").trim();
+      if(!nim){ toast("NIM tidak boleh kosong", "warn"); return; }
+      setLoading(btnCheck, true);
+      try{
+        const res = await api("/.netlify/functions/validate-nim", { method:"POST", body:{ nim } });
+        const data = await res.json();
+        if(!res.ok || data.valid===false){ nimResult.hidden=false; nimResult.textContent="NIM tidak valid"; nimResult.style.borderColor="var(--error)"; toast("NIM tidak ditemukan", "error"); return; }
+        state.nim = data.nim;
+        state.nama = data.nama || "";
+        state.usage = data.usage || { subdomains:0, emails:0 };
+        nimResult.hidden=false;
+        nimResult.textContent=`${data.nim} • ${data.nama || "-"}`;
+        nimResult.style.borderColor="rgba(148,163,184,.25)";
+        protectInfo.hidden = !(["41226265","41226251"].includes(data.nim));
+        await refreshUsageLists();
+        toast("NIM terverifikasi. Selamat datang, " + (data.nama || "Mahasiswa") + "!", "ok");
+      }catch(err){ toast("Gagal memvalidasi NIM: " + err.message, "error"); }
+      finally{ setLoading(btnCheck, false); renderUsage(); }
+    }
+    async function refreshUsageLists(){
+      if(!state.nim) return;
+      const res = await api(`/.netlify/functions/list-usage?nim=${encodeURIComponent(state.nim)}`);
+      const data = await res.json();
+      if(res.ok){
+        state.usage = data.usage || state.usage;
+        state.subs = (data.usage && data.usage.subdomainsDetail) || [];
+        state.emails = (data.usage && data.usage.emailsDetail) || [];
+        renderUsage(); renderSubs(); renderEmails();
+      }
+    }
+    async function createSubdomain(){
+      if(!state.nim){ toast("Validasi NIM dulu ya.", "warn"); return; }
+      const sub = (subInput.value||"").trim().toLowerCase();
+      if(!sub){ toast("Nama subdomain belum diisi", "warn"); return; }
+      setLoading(btnSub, true);
+      try{
+        const res = await api("/.netlify/functions/create-subdomain", {
+          method:"POST", body:{ nim: state.nim, subdomain: sub },
+          needAuth: ["41226265","41226251"].includes(state.nim)
+        });
+        const data = await res.json();
+        if(!res.ok){ throw new Error(data.error || "Gagal membuat subdomain"); }
+        toast(`Subdomain berhasil: ${data.fqdn}`, "ok");
+        subInput.value=""; await refreshUsageLists();
+      }catch(err){ toast(err.message, "error"); }
+      finally{ setLoading(btnSub, false); }
+    }
+    async function createEmail(){
+      if(!state.nim){ toast("Validasi NIM dulu ya.", "warn"); return; }
+      const local = (emailLocal.value||"").trim().toLowerCase();
+      const sub = emailSub.value;
+      const dest = (destEmail.value||"").trim();
+      if(!local || !sub || !dest){ toast("Lengkapi semua isian email.", "warn"); return; }
+      setLoading(btnEmail, true);
+      try{
+        const res = await api("/.netlify/functions/create-email", {
+          method:"POST",
+          body:{ nim: state.nim, local, subdomain: sub, destination: dest },
+          needAuth: ["41226265","41226251"].includes(state.nim)
+        });
+        const data = await res.json();
+        if(!res.ok){ throw new Error(data.error || "Gagal membuat email"); }
+        toast(`Email berhasil: ${data.email}`, "ok");
+        emailLocal.value=""; destEmail.value=""; await refreshUsageLists();
+      }catch(err){ toast(err.message, "error"); }
+      finally{ setLoading(btnEmail, false); }
+    }
+
+    $("#year").textContent = new Date().getFullYear();
+    document.getElementById("btnCheck").addEventListener("click", validateNim);
+    document.getElementById("btnSub").addEventListener("click", createSubdomain);
+    document.getElementById("btnEmail").addEventListener("click", createEmail);
+  </script>
+</body>
+</html>

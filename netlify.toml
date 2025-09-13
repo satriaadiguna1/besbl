@@ -1,0 +1,13 @@
+[functions]
+directory = "netlify/functions"
+node_bundler = "esbuild"
+external_node_modules = ["mongodb"]
+
+[build]
+command = "npm run build"
+publish = "."
+
+[[redirects]]
+from = "/api/*"
+to = "/.netlify/functions/:splat"
+status = 200
